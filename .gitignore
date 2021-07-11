@@ -5,6 +5,8 @@
 /api/node_modules
 /.pnp
 .pnp.js
+.vscode/
+front-end/node-modules/
 
 # testing
 /coverage
