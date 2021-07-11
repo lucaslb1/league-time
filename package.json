@@ -1,0 +1,12 @@
+{
+  "name": "league-time",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "docker-compose up --build -d",
+    "start": "(cd api && npm run start)"
+  },
+  "author": "Lucas Battelle",
+  "license": "ISC"
+}

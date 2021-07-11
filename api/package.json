@@ -1,0 +1,23 @@
+{
+  "name": "league-time-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Lucas Battelle",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "limiter": "^2.1.0",
+    "pg": "^8.6.0",
+    "twisted": "^1.44.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "nodemon": "^2.0.9"
+  }
+}
