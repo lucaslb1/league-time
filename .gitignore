@@ -6,7 +6,7 @@
 /.pnp
 .pnp.js
 .vscode/
-front-end/node-modules/
+/front-end/node_modules
 
 # testing
 /coverage
