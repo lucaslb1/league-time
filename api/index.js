@@ -49,7 +49,7 @@ app.get('/drop_tables', db.drop_tables)
 app.get('/test', db.get_matches)
 
 // Main API
-app.use('/api/v1', summoner)
+app.use('/api', summoner)
 
 
 let port = process.env.PORT
