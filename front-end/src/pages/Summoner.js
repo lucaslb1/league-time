@@ -10,19 +10,32 @@ const Summoner = () => {
 
     useEffect(() => {
         async function getData() {
-            return [{gameId: 123123123, lenght:4932}];
+            try {
+                const res = await fetch('http://localhost:3001/api/v1/' + server + '/'+ username);
+                const data = await res.json();
+                console.log(data);
+                setResponse(data.matchList);
+                setIsLoaded(true); 
+            } catch (error) {
+                console.log(error.message)
+                setIsError(true);
+            }
         };
         
-        let response = getData();
-        setResponse(response);
-        setIsLoaded(true); 
-    }, []);
+        if (server && username) {
+            getData();
+        }
+    }, [server, username]);
 
     if (isError) {
         return <h1>Error</h1>;
     }
     if (isLoaded) {
-        return <h1>done loading</h1>;
+        return (
+            <>
+                <h1>found {response.length} matches</h1>
+            </>
+        );
     }
     return <h1>Loading</h1>
 }

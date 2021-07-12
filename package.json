@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "prestart": "docker-compose up --build -d",
-    "start": "(cd api && npm run start)"
+    "frontend": "cd front-end && npm start",
+    "backend": "cd api && npm start",
+    "start": "(npm run backend) & (npm run frontend)"
   },
   "author": "Lucas Battelle",
   "license": "ISC"

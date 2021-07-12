@@ -51,7 +51,11 @@ router.get('/:server/:username' , async (req, res) => {
                 }
             }
             console.log('Done with looping through matches')
-            return res.send('done processing matches')
+            const fullMatchList = await req.pool.query({
+                text: 'SELECT * FROM matches WHERE $1 = ANY (players);', 
+                values: [summoner.response.accountId]
+            }).then(data => data.rows);
+            return res.json({matchList: fullMatchList})
         } else {
             return res.send('na server only')
         }
