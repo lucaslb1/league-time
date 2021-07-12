@@ -58,7 +58,7 @@ const getRegion = (servername) => {
  * 4. Send response to client with, old matches and number of new matches found
  * 5. Open web socket, add new matches to queue, figure out how to do that part
  */
-router.get('v2/:server/:username', async (req, res) => {
+router.get('/v2/:server/:username', async (req, res) => {
     const {server, username} = req.params;
     const region = getRegion(server);
 
@@ -69,19 +69,23 @@ router.get('v2/:server/:username', async (req, res) => {
         text: 'SELECT * FROM matches WHERE $1 = ANY (players);',
         values: [accountId]
     }).then(res => res.rows); // Todo: error catch
-    let matchListPromise = api.Match.list(accoutnId, region).then(res => res.response.matches); // Todo: rate limit
-    let [dbMatchList, apiMatchList] = await Promise.all(dbMatchListPromise, matchListPromise);
+    let matchListPromise = api.Match.list(accountId, region).then(res => res.response.matches); // Todo: rate limit
+    let [dbMatchList, apiMatchList] = await Promise.all([dbMatchListPromise, matchListPromise]);
 
     // Create two sets of gameId's
     let dbSet = new Set();
     let apiSet = new Set();
-    dbMatchList.forEach(elem => dbSet.add(elem.gameId));
+    dbMatchList.forEach(elem => dbSet.add(parseInt(elem.gameid))); // For some reason the gameId's returned from db where string
     apiMatchList.forEach(elem => apiSet.add(elem.gameId));
+    console.log('dbSet size: ' + dbSet.size);
+    console.log('apiSet size: ' + apiSet.size);
+    // console.log(dbSet);
+    // console.log(apiSet);
     
     // Find set of gameId's in apiSet not in dbSet
-    // https://2ality.com/2015/01/es6-set-operations.html
     let differenceSet = new Set([...apiSet].filter(x => !dbSet.has(x)));
-    console.log(differenceSet);
+    console.log('differenceSet size: ' + differenceSet.size);
+    res.send('new matches: ' + differenceSet.size);
 });
 
 
