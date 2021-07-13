@@ -118,7 +118,7 @@ router.get('/v1/:server/:username' , async (req, res) => {
             for (let i = 0; i < matches.length; i++) {
                 let {gameId} = matches[i]
                 console.log(gameId)
-                let {rows} = await req.pool.query({text: 'SELECT * FROM matches WHERE gameId = $1', values: [gameId]})
+                let rows = await req.pool.any({text: 'SELECT * FROM matches WHERE gameId = $1', values: [gameId]})
                 if (rows.length === 0) {
                     const match = await getMatch(gameId, REGION)
                     let players = []
@@ -126,7 +126,7 @@ router.get('/v1/:server/:username' , async (req, res) => {
                         // console.log(elem)
                         players.push(elem.player.accountId)
                     })
-                    await req.pool.query({text: 'INSERT INTO matches (gameId, length, players) VALUES ($1, $2, $3)', values: [gameId, match.response.gameDuration, players]})
+                    await req.pool.any({text: 'INSERT INTO matches (gameId, length, players) VALUES ($1, $2, $3)', values: [gameId, match.response.gameDuration, players]})
                     console.log('match: ' + i)  
                 } else {
                     console.log('match found')
@@ -134,10 +134,10 @@ router.get('/v1/:server/:username' , async (req, res) => {
             }
             console.log('Done with looping through matches')
             
-            const fullMatchList = await req.pool.query({
+            const fullMatchList = await req.pool.any({
                 text: 'SELECT * FROM matches WHERE $1 = ANY (players);', 
                 values: [summoner.response.accountId]
-            }).then(data => data.rows);
+            })
             return res.json({matchList: fullMatchList})
         } else {
             return res.send('na server only')
