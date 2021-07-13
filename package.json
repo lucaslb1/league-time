@@ -11,5 +11,8 @@
     "start": "(npm run backend) & (npm run frontend)"
   },
   "author": "Lucas Battelle",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "pg-promise": "^10.10.2"
+  }
 }
