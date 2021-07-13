@@ -65,11 +65,10 @@ router.get('/v2/:server/:username', async (req, res, next) => {
     api.Summoner.getByName(username, REGION).then(async (summoner) => {
         let accountId = summoner.response.accountId;
         
-        let dbMatchListPromise = req.pool.query({
+        let dbMatchListPromise = req.pool.any({
             text: 'SELECT * FROM matches WHERE $1 = ANY (players);',
             values: [accountId]
-        })
-        .then(res => res.rows);
+        });
 
         let matchListPromise = api.Match.list(accountId, REGION).then(res => res.response.matches); // Todo: rate limit
         let [dbMatchList, apiMatchList] = await Promise.all([dbMatchListPromise, matchListPromise]);
