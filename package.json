@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prestart": "docker-compose up --build -d",
+    "db": "docker-compose up --build -d",
+    "prestart": "npm run db",
     "frontend": "cd front-end && npm start",
     "backend": "cd api && npm start",
     "start": "(npm run backend) & (npm run frontend)"
