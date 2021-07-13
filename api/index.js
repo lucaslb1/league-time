@@ -6,24 +6,6 @@ const summoner = require('./routes/summoner')
 
 const app = express()
 
-const Pool = require('pg').Pool
-const pool = new Pool({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
-})
-
-try {
-    db.db_setup(pool)
-} catch (error) {
-    console.log(error.message)
-}
-
-
-pool.on('error', () => {console.log('Lost PG connection')})
-
 // Middlewear functions
 const timer =  (req, res, next) =>  {
     console.time('response time')
@@ -31,7 +13,7 @@ const timer =  (req, res, next) =>  {
     console.timeEnd('response time')
 }
 const db_middlewear = (req, res, next) => {
-    req.pool = pool
+    req.pool = db
     next()
 }
 
@@ -40,17 +22,22 @@ app.use(cors())
 app.use(timer)
 app.use(db_middlewear)
 
-
-// Routes
-app.get('/', (req, res) => {
-    return res.send('Test')
-})
-app.get('/drop_tables', db.drop_tables)
-app.get('/test', db.get_matches)
-
 // Main API
 app.use('/api', summoner)
 
+
+app.get('/', (req, res) => {
+    return res.send('Test')
+})
+
+app.get('/drop_table', async (req, res) => {
+    try {
+        await req.pool.query('DROP TABLE IF EXISTS matches;')
+        res.send('droped matches table')
+    } catch (error) {
+        res.send('error: ' + error.message)
+    }
+})
 
 let port = process.env.PORT
 app.listen(port, ()=> {
