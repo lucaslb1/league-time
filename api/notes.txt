@@ -1,0 +1,4 @@
+1. Open a web socket and send it along with old match data.
+2. Send new gameId's along with websocket to queue to be worked on.
+3. When a new match is found send it to through websocket until all matches are done being processed.
+4. Close web socket
