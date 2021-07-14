@@ -126,7 +126,7 @@ router.get('/v1/:server/:username' , async (req, res) => {
                         // console.log(elem)
                         players.push(elem.player.accountId)
                     })
-                    await req.pool.any({text: 'INSERT INTO matches (gameId, length, players) VALUES ($1, $2, $3)', values: [gameId, match.response.gameDuration, players]})
+                    await req.pool.any({text: 'INSERT INTO matches (gameId, gameDuration, players) VALUES ($1, $2, $3)', values: [gameId, match.response.gameDuration, players]})
                     console.log('match: ' + i)  
                 } else {
                     console.log('match found')
